@@ -26,26 +26,31 @@ public class RT
     static public void      noop() 
     {
     }
+    
     static public <T> T     firstNotNull(T... tt) 
     {
         for(T t :tt) if (t != null) return t;
         return null;
     }
+    
     static public <T> T     last(List<T> tt) 
     {
         return tt.get(tt.size() - 1);
     }
+    
     static public boolean   notNulls(Object... xx) 
     {
         for(Object o : xx) if (o == null) return false;
         return true;
     }
+    
     static public <T> List<T> newList(T... ts) 
     {
         List<T> ret = new ArrayList<>();
         for(T t : ts) ret.add(t);
         return ret;
     }
+    
     static public <T> Iterable<T> newIterable(final T... ts) 
     {
         final Iterator<T> it = new Iterator<T>()
@@ -65,6 +70,7 @@ public class RT
             @Override public Iterator<T> iterator() { return it; }
         };
     }
+    
     static public <T> Iterable<T> newIterable(final List<T> ts) 
     {
         final Iterator<T> it = new Iterator<T>()
@@ -89,14 +95,17 @@ public class RT
     {
         throw new RuntimeException(e.getMessage(), e);
     }
+    
     static public void throwRte(String message) 
     {
         throw new RuntimeException(message);
     }
+    
     static public void throwParsee(FeatureInputStream fin, String message) 
     {
         throw new ParseEx(fin, message);
     }
+    
     static public void throwParsee(FeatureInputStream fin, String message, Exception y) 
     {
         throw new ParseEx(fin, message, y);
@@ -107,6 +116,7 @@ public class RT
         return (in instanceof FeatureInputStream) ? (FeatureInputStream)in 
                 : new FeatureInputStream(in instanceof CachingInputStream ? in : new CachingInputStream(in)) ;
     }
+    
     static public FeatureInputStream fin(String s) 
     {
         return fin(new ByteArrayInputStream(s.getBytes(RT.UTF8)));
@@ -116,6 +126,7 @@ public class RT
     {
         return superclazz.isAssignableFrom(o.getClass());
     }
+    
     static public boolean classIn(Object o, Class... superclazzes) 
     {
         for(Class superclazz: superclazzes)
@@ -124,13 +135,14 @@ public class RT
         }
         return false;
     }
+    
     static public boolean within(Object x, Object... yy) 
     {
         for(Object y : yy)
-        if (x == y) 
-        {
-            return true;
-        }
+            if (x == y) 
+            {
+                return true;
+            }
         return false;
     }
     

@@ -8,7 +8,8 @@ import org.junit.Test;
 
 public class RegexMapperTest {
     
-    @Test public void testMapSimple() throws IOException {
+    @Test public void testMapSimple() throws IOException
+    {
         RegexMapper<Integer> rl = new RegexMapper.Builder()
                 .mapAll(
                         "abc", 1,
@@ -22,7 +23,8 @@ public class RegexMapperTest {
         assertEquals(3, (int)rl.readNext(in).u);
     }
     
-    @Test public void testMapWsp() throws IOException {
+    @Test public void testMapWsp() throws IOException
+    {
         RegexMapper<Integer> rl = new RegexMapper.Builder()
                 .mapAll(
                         "[ \t\r\n]+", 0,
@@ -34,7 +36,8 @@ public class RegexMapperTest {
         assertReadSequence(rl, in, 0,1,0,2,0,1,2,null);
     }
     
-    private <T> void assertReadSequence(RegexMapper<T> rl, FeatureInputStream in, T ... ts) throws IOException {
+    private <T> void assertReadSequence(RegexMapper<T> rl, FeatureInputStream in, T ... ts) throws IOException
+    {
         for(T t : ts)
             assertEquals(t, (T)rl.readNext(in).u);
     }

@@ -629,17 +629,15 @@ public class StreamRegex {
 
     static
     {
-        for (char x : new char[]
-        {
-            '\t', '\r', '\n', '\\', '[', ']', '(', ')', '^', '$'
-        })
+        for (char x : new char[] {
+                '\t', '\r', '\n', '\\', '[', ']', '(', ')', '^', '$'
+            })
         {
             CTX1.set(x);
         }
-        for (char x : new char[]
-        {
-            '\t', '\r', '\n', '\\', '[', ']', '(', ')', '^', '$', '-'
-        })
+        for (char x : new char[] {
+                '\t', '\r', '\n', '\\', '[', ']', '(', ')', '^', '$', '-'
+            })
         {
             CTX_CC.set(x);
         }

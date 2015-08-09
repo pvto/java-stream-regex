@@ -41,7 +41,8 @@ public class StreamRegexTest {
     @Test public void testGroupPipe2() throws IOException {     assertTrue(r("(f|(o))*bar").matches(fin("fooobar"))); }
     @Test public void testGroupPipe2_() throws IOException {    assertTrue(r("((f)|(o))*bar").matches(fin("fooobar"))); }
     @Test public void testGroupPipe3() throws IOException {     assertTrue(r("(((fg?))|(o|p))*(bar)+").matches(fin("fooobarbar"))); }
-    @Test public void testGroup2b() throws IOException {        
+    @Test public void testGroup2b() throws IOException
+    {        
         StreamRegex r = r("(f(o?)?o)*");
         assertTrue(r.root.GROUP);
         assertEquals(0, r.root.any.get(0).min);
@@ -57,13 +58,15 @@ public class StreamRegexTest {
     @Test public void testGroupNest3a_b() throws IOException {  assertTrue(r("((a(b)))*").matches(fin("abab"))); }
     @Test public void testGroupNest() throws IOException {      assertTrue(r("(b(ö|a(c)?(r|x)))").matches(fin("bar"))); }
     @Test public void testGroup5() throws IOException {         assertFalse(r("(f[op]{3})*(b(c|(b)(r|x)))").matches(fin("fooobar"))); }
-    @Test public void testCombo() throws IOException {
+    @Test public void testCombo() throws IOException
+    {
         StreamRegex r = r("(a*[0-9]+(.[0-9])?)|foobar|baz");
         assertTrue(r.matches(fin("aaaa0.3")));
         assertTrue(r.matches(fin("foobar")));
         assertTrue(r.matches(fin("baz")));
     }
-    @Test public void testSimplify() {
+    @Test public void testSimplify()
+    {
         CharClass x = new CharClass();
         x.inr.add(new CharRange(100, 200));
         x.outr.add(new CharRange(110,111));
@@ -79,26 +82,35 @@ public class StreamRegexTest {
         assertTrue(x.in(200));
     }
     
-    private StreamRegex r(String s) {
+    private StreamRegex r(String s)
+    {
         return new StreamRegex(s);
     }
-    private StreamRegex rp(String s) {
+    
+    private StreamRegex rp(String s)
+    {
         StreamRegex x = r(s);
         SRNode.print(System.out, x.root);
         return x;
     }
     
-    @Test public void testBig() throws IOException {
+    @Test public void testBig() throws IOException
+    {
         testBig_(1000000);
     }
-    @Ignore @Test public void testBig2() throws IOException {
+    
+    @Ignore @Test public void testBig2() throws IOException
+    {
         testBig_(100000000);
     }
-    private void testBig_(final int count) throws IOException {
+    
+    private void testBig_(final int count) throws IOException
+    {
         long start = System.currentTimeMillis();
         InputStream in = new InputStream() {
             int i = 0;
-            @Override public int read() throws IOException {
+            @Override public int read() throws IOException
+            {
                 if (i++ > count) {return -1;}
                 return 'a'+(i%2);
             }
@@ -114,19 +126,24 @@ public class StreamRegexTest {
     @Test public void testRead() throws IOException {       assertEquals("foo", r("[fo]+").readItem(fin("foobar"))); }
     @Test public void testReadG() throws IOException {      assertEquals("foo", r("(foo|b00)").readItem(fin("foobar"))); }
     @Test public void testReadG2() throws IOException {     assertEquals("foo", r("(f[0-9]+|foo|b00)").readItem(fin("foobar"))); }
-    @Test public void testRead2() throws IOException {     
+    @Test public void testRead2() throws IOException
+    {     
         FeatureInputStream fin = fin("foobarar");
         assertEquals("foo", r("(f[0-9]+|foo|b00)").readItem(fin));
         assertEquals("barar", r("b[ar]+").readItem(fin));
         assertEquals(null, r("[a-z]+").readItem(fin));
     }
-    @Test public void testReadStop() throws IOException {     
+    
+    @Test public void testReadStop() throws IOException
+    {     
         FeatureInputStream fin = fin("foobarbaz");
         assertEquals("foo", r("fo*c*").readItem(fin));
         assertEquals("bar", r("b[ax]+r*").readItem(fin));
         assertEquals("ba",  r("ba+").readItem(fin));
     }
-    @Test public void testReadNot() throws IOException {     
+    
+    @Test public void testReadNot() throws IOException
+    {     
         FeatureInputStream fin = fin("foobe");
         assertEquals(null, r("fo*c").readItem(fin));
         fin.rewind();
@@ -136,7 +153,8 @@ public class StreamRegexTest {
         assertEquals("e", r("[^f]+").readItem(fin));
     }
 
-    @Test public void testRead_aabbba() throws IOException {     
+    @Test public void testRead_aabbba() throws IOException
+    {     
         FeatureInputStream fin = fin("aabbba");
         assertEquals("a", r("a").readItem(fin));
         assertEquals("a", r("a").readItem(fin));
@@ -153,12 +171,14 @@ public class StreamRegexTest {
         assertEquals(null, r("[a-z]+").readItem(fin));
     }
     
-    @Test public void testCacheCharClasses() throws IOException {
+    @Test public void testCacheCharClasses() throws IOException
+    {
         assertEquals(2, r("[o][m][o][m]").charClassCache.size());
         assertEquals(1, r("[abc][a-c]").charClassCache.size());
     }
 
-    @Test public void testNestingLevel() throws IOException {
+    @Test public void testNestingLevel() throws IOException
+    {
         StreamRegex st = r("abc");
         SRNode.print(System.out, st.root);
         assertEquals(3, st.root.any.get(0).next.next.nestingLevel);

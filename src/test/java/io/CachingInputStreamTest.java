@@ -10,7 +10,8 @@ import static org.junit.Assert.*;
 public class CachingInputStreamTest {
     
     @Test
-    public void testCaching() throws UnsupportedEncodingException, IOException {
+    public void testCaching() throws UnsupportedEncodingException, IOException
+    {
         InputStream data = new ByteArrayInputStream("foobarbaz".getBytes("UTF-8"));
         CachingInputStream ci = new CachingInputStream(data);
         int c;
