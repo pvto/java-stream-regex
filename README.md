@@ -45,3 +45,10 @@ In the above test I create three regexes (whitespace), "a+b?", "b+", then map th
 I create a special input stream from a string (utility method util.RT.fin()), and then apply the mapper.
 This test passes, reading the following input tokens: "  ", "ab", " ", "bb", "aaab", "b", null (signals stream end).
 
+##Performance and regex compliance considerations
+
+Regex compliance is limited.  Only read and match operations are supported.  Only a restricted subset of standard regex features is supported, omitting capturing groups and other more complex features.
+
+Currently performance is 20–40 times slower than a simple if-then automaton.
+
+Things to optimize include character class matching and conflict resolution (which is now based on a dynamic list of candidate matches).
