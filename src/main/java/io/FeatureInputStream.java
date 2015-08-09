@@ -119,96 +119,6 @@ public class FeatureInputStream extends InputStream {
 
 
     
-    public int readInt() throws IOException
-    {
-        skipDelims();
-        int ch = read();
-        updLc(ch);
-        StringBuilder b = new StringBuilder();
-        if (ch == (int)'-')
-        {
-            b.append((char)ch);
-            ch = read();
-            updLc(ch);
-        }
-        while(ch >= (int)'0' && ch <= (int)'9')
-        {
-            b.append((char)ch);
-            ch = read();
-            updLc(ch);
-        }
-        buffer = ch;
-        return Integer.parseInt(b.toString());
-    }
-
-    public String readString() throws IOException
-    {
-        skipDelims();
-        int ch = readUtf8();
-        StringBuilder b = new StringBuilder();
-        if (ch == '"')
-        {
-            ch = read();
-            while(ch != '"')
-            {
-                // TODO: UTF-8
-                b.append((char)ch);
-                ch = readUtf8();
-            }
-        }
-        else
-        {
-            while(ch != 0x20 && ch != '\t' && ch != '\r' && ch != '\n' && ch != -1)
-            {
-                b.append((char)ch);
-                ch = readUtf8();
-            }
-            buffer = ch;
-        }
-        return b.toString();
-    }
-
-    public String readString(int extraDelim) throws IOException
-    {
-        skipDelims();
-        int ch = readUtf8();
-        StringBuilder b = new StringBuilder();
-        if (ch == '"')
-        {
-            ch = readUtf8();
-            while(ch != '"')
-            {
-                // TODO: UTF-8
-                b.append((char)ch);
-                ch = readUtf8();
-            }
-        }
-        else
-        {
-            while(ch != 0x20 && ch != '\t' && ch != '\r' && ch != '\n' && ch != -1 && ch != extraDelim)
-            {
-                b.append((char)ch);
-                ch = readUtf8();
-            }
-            buffer = ch;
-        }
-        return b.toString();
-    }
-    
-    public String readLine() throws IOException
-    {
-        StringBuilder b = new StringBuilder();
-        int ch = readUtf8();
-        updLc(ch);
-        while(ch != '\n')
-        {
-            if (ch != '\r')
-                b.append((char)ch);
-            ch = readUtf8();
-        }
-        return b.toString();
-    }
-
     public char readChar() throws IOException
     {
         int ch = readUtf8();
@@ -226,39 +136,6 @@ public class FeatureInputStream extends InputStream {
             r[i] = ch;
         }
         return r;
-    }
-
-    public float readFloat() throws IOException
-    {
-        skipDelims();
-        int ch = read();
-        StringBuilder b = new StringBuilder(); 
-        if (ch == '-')
-        {
-            updLc(ch);
-            b.append("-0");  ch = read();
-        }
-        else
-            b.append('0');  // allow for floats like .5
-        while(ch >= (int)'0' && ch <= (int)'9')
-        {
-            updLc(ch);
-            b.append((char)ch);
-            ch = read();
-        }
-        if (ch == '.')
-        {
-            b.append((char)ch);
-            ch = read();
-            while(ch >= (int)'0' && ch <= (int)'9')
-            {
-                updLc(ch);
-                b.append((char)ch);
-                ch = read();
-            }
-        }
-        buffer = ch;
-        return Float.parseFloat(b.toString());
     }
 
     public int peekChar() throws IOException
@@ -284,16 +161,6 @@ public class FeatureInputStream extends InputStream {
             b.append(ch);
         }
         return b.toString();
-    }
-
-    public int readInt(int chars, int base) throws IOException
-    {
-        StringBuilder bd = new StringBuilder();
-        for (int i = 0; i < chars; i++)
-        {
-            bd.append(readChar());
-        }
-        return Integer.parseInt(bd.toString(), base);
     }
 
     public String readMarked() throws IOException
