@@ -31,8 +31,6 @@ public class RegexMapper<T> extends StreamRegex {
     
     public T getReferendFromLastRead()
     {
-        System.out.println(objectRefs);
-        System.out.println(super.pattern);
         return objectRefs.get(super.getLastMatchingFragmentOffset());
     }
 
