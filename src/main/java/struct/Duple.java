@@ -23,7 +23,7 @@ public class Duple<T,U> {
     @Override
     public int hashCode()
     {
-        return RT.nullSafeHashCode(t) * 21 
+        return RT.nullSafeHashCode(t) * 31 
                 + RT.nullSafeHashCode(u);
     }
     

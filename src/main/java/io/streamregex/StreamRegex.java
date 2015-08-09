@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
+import util.RT;
 
 /**
  * A regex for matching streams and for reading tokens from streams.
@@ -933,23 +934,11 @@ class CharClass {
         {
             return x;
         }
-        int ret = 0;
-        if (outr != null)
-        {
-            ret = outr.hashCode();
-        }
-        if (out != null)
-        {
-            ret = ret * 31 + out.hashCode();
-        }
-        if (in != null)
-        {
-            ret = ret * 31 + in.hashCode();
-        }
-        if (inr != null)
-        {
-            ret = ret * 31 + inr.hashCode();
-        }
+        int ret = RT.nullSafeHashCode(outr) * 31
+                + RT.nullSafeHashCode(out) * 31
+                + RT.nullSafeHashCode(in) * 31
+                + RT.nullSafeHashCode(inr)
+                ;
         return ret;
     }
 
@@ -965,27 +954,10 @@ class CharClass {
         {
             return x == c.x;
         }
-        return !(!equalz(outr, c.outr)
-                || !equalz(out, c.out)
-                || !equalz(in, c.in)
-                || !equalz(inr, c.inr));
-    }
-
-    private <T> boolean equalz(T a, T b)
-    {
-        if (a == null && b == null)
-        {
-            return true;
-        }
-        if (a == null && b != null)
-        {
-            return false;
-        }
-        if (a != null && b == null)
-        {
-            return false;
-        }
-        return a.equals(b);
+        return !(!RT.nullSafeEquals(outr, c.outr)
+                || !RT.nullSafeEquals(out, c.out)
+                || !RT.nullSafeEquals(in, c.in)
+                || !RT.nullSafeEquals(inr, c.inr));
     }
 
 }
