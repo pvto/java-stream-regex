@@ -14,6 +14,8 @@ public class StreamRegexTest {
     @Test public void testMatch() throws IOException {          assertFalse(r("foo").matches(fin("foo-x"))); }
     @Test public void testUtf8() throws IOException {           assertTrue(r("[\\u0020-\\u0080]*").matches(fin("foobar"))); }
     @Test public void testSpecials() throws IOException {       assertTrue(r("a\\[\\]\\]\\(\\)b[\\[\\-]+").matches(fin("a[]]()b-["))); }
+    @Test public void testAa_ab() throws IOException {          assertTrue(r("a*ab").matches(fin("aaab"))); }
+    @Test public void testAbaStar() throws IOException {        assertTrue(r("(aba+)*").matches(fin("abaaba"))); }
     @Test public void testRepet() throws IOException {          assertTrue(r("fo*ba*r").matches(fin("foobr"))); }
     @Test public void testRepeti() throws IOException {         assertTrue(r("f?o?bar").matches(fin("fbar"))); }
     @Test public void testRepete() throws IOException {         assertTrue(r("fo+o?bar+").matches(fin("foobarr"))); }
@@ -141,7 +143,18 @@ public class StreamRegexTest {
         assertEquals("bar", r("b[ax]+r*").readItem(fin));
         assertEquals("ba",  r("ba+").readItem(fin));
     }
+
+    @Test public void testReadAa_abcd() throws IOException
+    { 
+        assertEquals("aaaabc", r("(a*|a*bc)").readItem(fin("aaaabc...")));
+        assertEquals("aaaa", r("(a*|a*bcd)").readItem(fin("aaaabc...")));
+    }
     
+    @Test public void testReadAbaStar() throws IOException
+    {     
+        assertEquals("aba", r("(aba+)*").readItem(fin("abaabaaba")));
+    }
+
     @Test public void testReadNot() throws IOException
     {     
         FeatureInputStream fin = fin("foobe");

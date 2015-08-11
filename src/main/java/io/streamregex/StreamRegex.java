@@ -15,14 +15,14 @@ import util.RT;
  * This implements a subset of java regular expressions (java.util.regex.*),
  * with the following simplifications.
  *
- * - reads UTF-8 / Latin1 stream - Only eager matching is supported - Character
- * representations: unicode characters \\uxxxx are implemented, while octal
- * characters are not - Back referencing constructs like ^ and \b and
- * (?&lt;=foo) are not supported - Startline and endline matchers ^ and $ are
- * not supported (while \\r \\n are) - Capturing groups are not implemented -
- * Character class shortcuts \w, \s, \d, etc. are not implemented - Supported
- * short escape characters are currently \\r \\n \\t - Regex comments are not
- * supported
+ * - reads UTF-8 / Latin1 stream 
+ * - Only eager matching is supported 
+ * - Character representations: unicode characters \\uxxxx are implemented, while octal characters are not 
+ * - Back referencing constructs like ^ and \b and (?&lt;=foo) are not supported 
+ * - Startline and endline matchers ^ and $ are not supported (while \\r \\n are) 
+ * - Capturing groups are not implemented 
+ * - Character class shortcuts \w, \s, \d, etc. are not implemented
+ * - Supported short escape characters are currently \\r \\n \\t - Regex comments are not supported
  *
  * If you have other requirements, you could have a look at Streamflyer
  * (https://code.google.com/p/streamflyer/).
@@ -32,6 +32,7 @@ public class StreamRegex {
     public final SRNode root = new SRNode(null, null, 0);
     public final String pattern;
     public SRNode lastMatchingFragment;
+    int lastMatchingLength = 0;
 
     public int getLastMatchingFragmentOffset()
     {
@@ -111,6 +112,8 @@ public class StreamRegex {
                 in.push(c);
                 if (in.peekChar() != -1 && !prevPossiblyEnding)
                 {
+                    if (lastMatchingLength > 0)
+                        return b.substring(0, lastMatchingLength);
                     return null;
                 }
                 break;
@@ -121,10 +124,16 @@ public class StreamRegex {
             {
                 possiblyEnding |= lane.node.POSSIBLY_ENDING_GROUP;
             }
+            if (possiblyEnding)
+            {
+                lastMatchingLength = b.length();
+            }
             if (!recycleLanes(y, lanes))
             {
                 if (in.peekChar() != -1 && !possiblyEnding)
                 {
+                    if (lastMatchingLength > 0)
+                        return b.substring(0, lastMatchingLength);
                     return null;
                 }
                 break;
