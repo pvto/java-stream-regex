@@ -49,6 +49,11 @@ public class StreamRegex {
         preprocess();
     }
 
+    public static StreamRegex srx(String pattern)
+    {
+        return new StreamRegex(pattern);
+    }
+    
     /**
      * this will hungrily match as much as possible - it will return null on a
      * partial match and never backtrack!
